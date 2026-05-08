@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовая оболочка — Дипломная работа</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .app {
+            width: 100%;
+            max-width: 700px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            padding: 35px 30px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        h1 {
+            color: #1e3c72;
+            font-size: 1.6em;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #2a5298;
+            margin-bottom: 18px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+        }
+
+        /* ФОРМЫ */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* КНОПКИ */
+        .btn {
+            display: inline-block;
+            padding: 11px 22px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2a5298;
+            color: #fff;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #1e3c72;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 2px solid #2a5298;
+            color: #2a5298;
+        }
+
+        .btn-outline:hover {
+            background: #eef2f9;
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.85em;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .buttons .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        /* СООБЩЕНИЯ */
+        .error {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+
+        .info {
+            background: #e7f3ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: #1e3c72;
+        }
+
+        /* ТЕСТ */
+        .question-block {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2a5298;
+        }
+
+        .question-num {
+            font-weight: 700;
+            color: #2a5298;
+            margin-bottom: 8px;
+        }
+
+        .option {
+            display: block;
+            padding: 10px 14px;
+            margin: 5px 0;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .option:hover {
+            border-color: #2a5298;
+        }
+
+        .option.selected {
+            border-color: #2a5298;
+            background: #e7f0ff;
+        }
+
+        .option input {
+            display: none;
+        }
+
+        .progress {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+
+        /* РЕЗУЛЬТАТ */
+        .result-box {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .grade {
+            font-size: 4em;
+            font-weight: 800;
+            color: #2a5298;
+        }
+
+        .grade-5 { color: #28a745; }
+        .grade-4 { color: #17a2b8; }
+        .grade-3 { color: #ffc107; }
+        .grade-2 { color: #dc3545; }
+
+        /* ТАБЛИЦА */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        th {
+            background: #2a5298;
+            color: #fff;
+        }
+
+        /* РЕДАКТОР */
+        .answer-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .answer-row input[type="text"] {
+            flex: 1;
+        }
+
+        .answer-row input[type="checkbox"],
+        .answer-row input[type="radio"] {
+            width: auto;
+            margin: 0;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app" id="app">
+    <!-- ЭКРАН АВТОРИЗАЦИИ -->
+    <div id="screen-login">
+        <h1>Тестовая оболочка</h1>
+        <p class="subtitle">Дипломная работа &bull; КРПЛ №28 &bull; Кыдырмаев И.М.</p>
+        <div class="form-group">
+            <label>Логин</label>
+            <input type="text" id="login-input" placeholder="Введите логин">
+        </div>
+        <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" id="password-input" placeholder="Введите пароль">
+        </div>
+        <p class="error" id="login-error"></p>
+        <button class="btn btn-primary" onclick="login()">Войти</button>
+        <p style="text-align:center; margin-top:15px; color:#888; font-size:0.85em;">
+            Учитель: teacher / 12345<br>Ученик: student / 12345
+        </p>
+    </div>
+
+    <!-- ЭКРАН УЧЕНИКА -->
+    <div id="screen-student" class="hidden">
+        <h2>Выберите тест</h2>
+        <div id="student-test-list" style="margin-bottom:20px;"></div>
+        <div id="student-test-area" class="hidden"></div>
+        <div class="buttons">
+            <button class="btn btn-outline btn-sm" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- ЭКРАН УЧИТЕЛЯ -->
+    <div id="screen-teacher" class="hidden">
+        <h2>Панель преподавателя</h2>
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="showCreateTest()">Создать тест</button>
+            <button class="btn btn-outline" onclick="showResults()">Журнал результатов</button>
+            <button class="btn btn-outline btn-sm" onclick="logout()">Выйти</button>
+        </div>
+        <hr>
+        <h3>Список тестов</h3>
+        <div id="teacher-test-list"></div>
+        <div id="teacher-editor" class="hidden"></div>
+        <div id="teacher-results" class="hidden"></div>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТА УЧЕНИКА -->
+    <div id="screen-result" class="hidden">
+        <div class="result-box" id="result-content"></div>
+        <div class="buttons" style="margin-top:20px;">
+            <button class="btn btn-primary" onclick="backToStudent()">Вернуться к тестам</button>
+            <button class="btn btn-outline btn-sm" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== ДАННЫЕ ====================
+    const DEFAULT_USERS = [
+        { login: 'teacher', password: '12345', role: 'teacher' },
+        { login: 'student', password: '12345', role: 'student' }
+    ];
+
+    let currentUser = null;
+    let currentTest = null;
+    let currentQuestionIndex = 0;
+    let studentAnswers = [];
+    let editingTestId = null;
+
+    // Загрузка / инициализация данных
+    function getData() {
+        let data = localStorage.getItem('test_app_data');
+        if (!data) {
+            data = {
+                users: DEFAULT_USERS,
+                tests: [],
+                results: []
+            };
+            saveData(data);
+            return data;
+        }
+        return JSON.parse(data);
+    }
+
+    function saveData(data) {
+        localStorage.setItem('test_app_data', JSON.stringify(data));
+    }
+
+    // ==================== НАВИГАЦИЯ ====================
+    function showScreen(id) {
+        document.querySelectorAll('#app > div').forEach(el => el.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function logout() {
+        currentUser = null;
+        currentTest = null;
+        currentQuestionIndex = 0;
+        studentAnswers = [];
+        editingTestId = null;
+        showScreen('screen-login');
+        document.getElementById('login-error').textContent = '';
+        document.getElementById('login-input').value = '';
+        document.getElementById('password-input').value = '';
+    }
+
+    // ==================== АВТОРИЗАЦИЯ ====================
+    function login() {
+        const loginVal = document.getElementById('login-input').value.trim();
+        const passVal = document.getElementById('password-input').value.trim();
+        const data = getData();
+        const user = data.users.find(u => u.login === loginVal && u.password === passVal);
+        const errorEl = document.getElementById('login-error');
+
+        if (!user) {
+            errorEl.textContent = 'Неверный логин или пароль';
+            return;
+        }
+
+        errorEl.textContent = '';
+        currentUser = user;
+
+        if (user.role === 'teacher') {
+            showTeacherScreen();
+        } else {
+            showStudentScreen();
+        }
+    }
+
+    // ==================== УЧЕНИК ====================
+    function showStudentScreen() {
+        showScreen('screen-student');
+        document.getElementById('student-test-area').classList.add('hidden');
+        renderStudentTestList();
+    }
+
+    function renderStudentTestList() {
+        const data = getData();
+        const container = document.getElementById('student-test-list');
+        if (data.tests.length === 0) {
+            container.innerHTML = '<p style="color:#888;">Нет доступных тестов.</p>';
+            return;
+        }
+        container.innerHTML = data.tests.map((t, i) => `
+            <div style="padding:12px; background:#f8f9fa; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                <span><strong>${t.title}</strong> (${t.questions.length} вопр.)</span>
+                <button class="btn btn-success btn-sm" onclick="startTest(${i})">Начать</button>
+            </div>
+        `).join('');
+    }
+
+    function startTest(index) {
+        const data = getData();
+        currentTest = { ...data.tests[index], index };
+        currentQuestionIndex = 0;
+        studentAnswers = new Array(currentTest.questions.length).fill(null);
+        document.getElementById('student-test-list').classList.add('hidden');
+        document.getElementById('student-test-area').classList.remove('hidden');
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const q = currentTest.questions[currentQuestionIndex];
+        const area = document.getElementById('student-test-area');
+        let optionsHTML = '';
+
+        if (q.type === 'single') {
+            optionsHTML = q.answers.map((a, i) => `
+                <label class="option ${studentAnswers[currentQuestionIndex] == i ? 'selected' : ''}" onclick="selectSingle(${i})">
+                    <input type="radio" name="q"> ${a.text}
+                </label>
+            `).join('');
+        } else if (q.type === 'multiple') {
+            optionsHTML = q.answers.map((a, i) => `
+                <label class="option ${studentAnswers[currentQuestionIndex] && studentAnswers[currentQuestionIndex].includes(i) ? 'selected' : ''}" onclick="toggleMultiple(${i})">
+                    <input type="checkbox"> ${a.text}
+                </label>
+            `).join('');
+        } else if (q.type === 'open') {
+            const val = studentAnswers[currentQuestionIndex] || '';
+            optionsHTML = `<input type="text" id="open-answer" value="${val}" placeholder="Введите ответ">`;
+        }
+
+        area.innerHTML = `
+            <div class="question-block">
+                <div class="question-num">Вопрос ${currentQuestionIndex + 1} из ${currentTest.questions.length}</div>
+                <p style="font-size:1.1em; margin-bottom:12px;">${q.text}</p>
+                ${optionsHTML}
+            </div>
+            <div class="progress">${currentQuestionIndex + 1} / ${currentTest.questions.length}</div>
+            <div class="buttons">
+                ${currentQuestionIndex > 0 ? `<button class="btn btn-outline" onclick="prevQuestion()">Назад</button>` : ''}
+                ${currentQuestionIndex < currentTest.questions.length - 1 ? 
+                    `<button class="btn btn-primary" onclick="nextQuestion()">Далее</button>` :
+                    `<button class="btn btn-success" onclick="finishTest()">Завершить</button>`
+                }
+            </div>
+        `;
+    }
+
+    function selectSingle(i) {
+        studentAnswers[currentQuestionIndex] = i;
+        renderQuestion();
+    }
+
+    function toggleMultiple(i) {
+        if (!studentAnswers[currentQuestionIndex]) studentAnswers[currentQuestionIndex] = [];
+        const arr = studentAnswers[currentQuestionIndex];
+        const idx = arr.indexOf(i);
+        if (idx > -1) arr.splice(idx, 1);
+        else arr.push(i);
+        studentAnswers[currentQuestionIndex] = [...arr];
+        renderQuestion();
+    }
+
+    function saveOpenAnswer() {
+        const input = document.getElementById('open-answer');
+        if (input && currentTest.questions[currentQuestionIndex].type === 'open') {
+            studentAnswers[currentQuestionIndex] = input.value.trim();
+        }
+    }
+
+    function nextQuestion() {
+        saveOpenAnswer();
+        currentQuestionIndex++;
+        renderQuestion();
+    }
+
+    function prevQuestion() {
+        saveOpenAnswer();
+        currentQuestionIndex--;
+        renderQuestion();
+    }
+
+    function finishTest() {
+        saveOpenAnswer();
+        let correct = 0;
+        const total = currentTest.questions.length;
+
+        currentTest.questions.forEach((q, i) => {
+            const userAns = studentAnswers[i];
+            if (q.type === 'single') {
+                const correctIdx = q.answers.findIndex(a => a.correct);
+                if (userAns === correctIdx) correct++;
+            } else if (q.type === 'multiple') {
+                const correctSet = q.answers.map((a, idx) => a.correct ? idx : -1).filter(v => v >= 0).sort().join(',');
+                const userSet = (userAns || []).sort().join(',');
+                if (correctSet === userSet) correct++;
+            } else if (q.type === 'open') {
+                const correctText = q.answers[0]?.text?.trim().toLowerCase() || '';
+                if ((userAns || '').toLowerCase().trim() === correctText) correct++;
+            }
+        });
+
+        const percent = Math.round((correct / total) * 100);
+        let grade;
+        if (percent >= 90) grade = 5;
+        else if (percent >= 70) grade = 4;
+        else if (percent >= 50) grade = 3;
+        else grade = 2;
+
+        // Сохранить результат
+        const data = getData();
+        data.results.push({
+            user: currentUser.login,
+            test: currentTest.title,
+            correct,
+            total,
+            percent,
+            grade,
+            date: new Date().toLocaleString()
+        });
+        saveData(data);
+
+        // Показать результат
+        const content = document.getElementById('result-content');
+        content.innerHTML = `
+            <p style="font-size:1.2em;">Тест: <strong>${currentTest.title}</strong></p>
+            <div class="grade grade-${grade}">${grade}</div>
+            <p>Правильных ответов: <strong>${correct} из ${total}</strong></p>
+            <p>Процент: <strong>${percent}%</strong></p>
+        `;
+        showScreen('screen-result');
+    }
+
+    function backToStudent() {
+        showStudentScreen();
+    }
+
+    // ==================== УЧИТЕЛЬ ====================
+    function showTeacherScreen() {
+        showScreen('screen-teacher');
+        document.getElementById('teacher-editor').classList.add('hidden');
+        document.getElementById('teacher-results').classList.add('hidden');
+        renderTeacherTestList();
+    }
+
+    function renderTeacherTestList() {
+        const data = getData();
+        const container = document.getElementById('teacher-test-list');
+        if (data.tests.length === 0) {
+            container.innerHTML = '<p style="color:#888;">Нет созданных тестов.</p>';
+            return;
+        }
+        container.innerHTML = data.tests.map((t, i) => `
+            <div style="padding:10px; background:#f8f9fa; border-radius:8px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+                <span><strong>${t.title}</strong> (${t.questions.length} вопр.)</span>
+                <span>
+                    <button class="btn btn-outline btn-sm" onclick="editTest(${i})">Ред.</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTest(${i})">Уд.</button>
+                </span>
+            </div>
+        `).join('');
+    }
+
+    function showCreateTest() {
+        editingTestId = null;
+        document.getElementById('teacher-editor').classList.remove('hidden');
+        renderEditor([]);
+    }
+
+    function editTest(index) {
+        const data = getData();
+        editingTestId = index;
+        document.getElementById('teacher-editor').classList.remove('hidden');
+        renderEditor(data.tests[index].questions);
+    }
+
+    function deleteTest(index) {
+        if (!confirm('Удалить тест?')) return;
+        const data = getData();
+        data.tests.splice(index, 1);
+        saveData(data);
+        renderTeacherTestList();
+    }
+
+    function renderEditor(questions) {
+        const editor = document.getElementById('teacher-editor');
+        let questionsHTML = questions.map((q, qi) => `
+            <div class="question-block" style="position:relative;">
+                <button style="position:absolute; top:8px; right:8px;" class="btn btn-danger btn-sm" onclick="deleteEditorQuestion(${qi})">✕</button>
+                <label>Вопрос ${qi + 1}</label>
+                <input type="text" class="q-text" value="${q.text}" placeholder="Текст вопроса">
+                <select class="q-type" onchange="changeEditorType(${qi}, this.value)">
+                    <option value="single" ${q.type === 'single' ? 'selected' : ''}>Один выбор</option>
+                    <option value="multiple" ${q.type === 'multiple' ? 'selected' : ''}>Несколько выборов</option>
+                    <option value="open" ${q.type === 'open' ? 'selected' : ''}>Открытый вопрос</option>
+                </select>
+                <div class="answers-area" id="answers-${qi}">
+                    ${renderAnswers(q, qi)}
+                </div>
+            </div>
+        `).join('');
+
+        editor.innerHTML = `
+            <h3>${editingTestId !== null ? 'Редактирование' : 'Создание'} теста</h3>
+            <div class="form-group">
+                <label>Название теста</label>
+                <input type="text" id="edit-test-title" value="${editingTestId !== null ? getData().tests[editingTestId].title : ''}" placeholder="Введите название теста">
+            </div>
+            <div id="editor-questions">${questionsHTML}</div>
+            <button class="btn btn-outline" onclick="addEditorQuestion()">+ Добавить вопрос</button>
+            <div class="buttons" style="margin-top:15px;">
+                <button class="btn btn-primary" onclick="saveTest()">Сохранить тест</button>
+                <button class="btn btn-outline btn-sm" onclick="cancelEdit()">Отмена</button>
+            </div>
+        `;
+    }
+
+    function renderAnswers(q, qi) {
+        if (q.type === 'open') {
+            return `
+                <label>Правильный ответ:</label>
+                <input type="text" class="open-answer" value="${(q.answers[0] && q.answers[0].text) || ''}" placeholder="Эталонный ответ">
+            `;
+        }
+        const answers = q.answers && q.answers.length > 0 ? q.answers : [{ text: '', correct: false }, { text: '', correct: false }];
+        const inputType = q.type === 'single' ? 'radio' : 'checkbox';
+        return answers.map((a, ai) => `
+            <div class="answer-row">
+                <input type="${inputType}" name="correct-${qi}" class="a-correct" ${a.correct ? 'checked' : ''}>
+                <input type="text" class="a-text" value="${a.text}" placeholder="Вариант ответа">
+                <button class="btn btn-danger btn-sm" onclick="removeAnswer(${qi}, ${ai})" ${answers.length <= 2 ? 'disabled' : ''}>✕</button>
+            </div>
+        `).join('') + `<button class="btn btn-outline btn-sm" onclick="addAnswer(${qi})">+ Вариант</button>`;
+    }
+
+    // Глобальные функции для редактора
+    window.addEditorQuestion = function() {
+        const container = document.getElementById('editor-questions');
+        const qi = container.children.length;
+        const div = document.createElement('div');
+        div.className = 'question-block';
+        div.style.position = 'relative';
+        div.innerHTML = `
+            <button style="position:absolute; top:8px; right:8px;" class="btn btn-danger btn-sm" onclick="deleteEditorQuestion(${qi})">✕</button>
+            <label>Вопрос ${qi + 1}</label>
+            <input type="text" class="q-text" placeholder="Текст вопроса">
+            <select class="q-type" onchange="changeEditorType(${qi}, this.value)">
+                <option value="single">Один выбор</option>
+                <option value="multiple">Несколько выборов</option>
+                <option value="open">Открытый вопрос</option>
+            </select>
+            <div class="answers-area" id="answers-${qi}">
+                <div class="answer-row">
+                    <input type="radio" name="correct-${qi}" class="a-correct">
+                    <input type="text" class="a-text" placeholder="Вариант ответа">
+                    <button class="btn btn-danger btn-sm" disabled>✕</button>
+                </div>
+                <div class="answer-row">
+                    <input type="radio" name="correct-${qi}" class="a-correct">
+                    <input type="text" class="a-text" placeholder="Вариант ответа">
+                    <button class="btn btn-danger btn-sm" disabled>✕</button>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="addAnswer(${qi})">+ Вариант</button>
+            </div>
+        `;
+        container.appendChild(div);
+    };
+
+    window.deleteEditorQuestion = function(qi) {
+        document.getElementById('editor-questions').children[qi].remove();
+        // Обновить нумерацию
+        [...document.getElementById('editor-questions').children].forEach((el, i) => {
+            el.querySelector('label').textContent = `Вопрос ${i + 1}`;
+            el.querySelector('.q-type').setAttribute('onchange', `changeEditorType(${i}, this.value)`);
+            el.querySelector('.answers-area').id = `answers-${i}`;
+            el.querySelector('button').setAttribute('onclick', `deleteEditorQuestion(${i})`);
+        });
+    };
+
+    window.changeEditorType = function(qi, type) {
+        const area = document.getElementById('answers-${qi}');
+        area.innerHTML = renderAnswers({ type, answers: [] }, qi);
+    };
+
+    window.addAnswer = function(qi) {
+        const area = document.getElementById('answers-${qi}');
+        const typeSelect = area.parentElement.querySelector('.q-type');
+        const type = typeSelect ? typeSelect.value : 'single';
+        const inputType = type === 'single' ? 'radio' : 'checkbox';
+        const row = document.createElement('div');
+        row.className = 'answer-row';
+        row.innerHTML = `
+            <input type="${inputType}" name="correct-${qi}" class="a-correct">
+            <input type="text" class="a-text" placeholder="Вариант ответа">
+            <button class="btn btn-danger btn-sm" onclick="this.parentElement.remove()">✕</button>
+        `;
+        const addBtn = area.querySelector('button');
+        area.insertBefore(row, addBtn);
+    };
+
+    window.removeAnswer = function(qi, ai) {
+        const area = document.getElementById('answers-${qi}');
+        const rows = area.querySelectorAll('.answer-row');
+        if (rows.length > 2 && rows[ai]) rows[ai].remove();
+    };
+
+    function saveTest() {
+        const title = document.getElementById('edit-test-title').value.trim();
+        if (!title) { alert('Введите название теста'); return; }
+
+        const questionBlocks = [...document.getElementById('editor-questions').children];
+        const questions = questionBlocks.map(block => {
+            const text = block.querySelector('.q-text').value.trim();
+            const type = block.querySelector('.q-type').value;
+            let answers = [];
+            if (type === 'open') {
+                const openVal = block.querySelector('.open-answer')?.value?.trim() || '';
+                answers = [{ text: openVal, correct: true }];
+            } else {
+                const rows = block.querySelectorAll('.answer-row');
+                rows.forEach(row => {
+                    const textVal = row.querySelector('.a-text').value.trim();
+                    const correct = row.querySelector('.a-correct').checked;
+                    if (textVal) answers.push({ text: textVal, correct });
+                });
+            }
+            return { text, type, answers };
+        }).filter(q => q.text);
+
+        if (questions.length === 0) { alert('Добавьте хотя бы один вопрос'); return; }
+
+        const data = getData();
+        const testObj = { title, questions };
+
+        if (editingTestId !== null) {
+            data.tests[editingTestId] = testObj;
+        } else {
+            data.tests.push(testObj);
+        }
+        saveData(data);
+        alert('Тест сохранён!');
+        showTeacherScreen();
+    }
+
+    function cancelEdit() {
+        showTeacherScreen();
+    }
+
+    // ==================== ЖУРНАЛ РЕЗУЛЬТАТОВ ====================
+    function showResults() {
+        document.getElementById('teacher-editor').classList.add('hidden');
+        const resDiv = document.getElementById('teacher-results');
+        resDiv.classList.remove('hidden');
+        const data = getData();
+        if (data.results.length === 0) {
+            resDiv.innerHTML = '<h3>Журнал результатов</h3><p style="color:#888;">Результатов пока нет.</p>';
+            return;
+        }
+        resDiv.innerHTML = `
+            <h3>Журнал результатов</h3>
+            <table>
+                <tr><th>Ученик</th><th>Тест</th><th>Верно</th><th>Всего</th><th>%</th><th>Оценка</th><th>Дата</th></tr>
+                ${data.results.slice().reverse().map(r => `
+                    <tr>
+                        <td>${r.user}</td>
+                        <td>${r.test}</td>
+                        <td>${r.correct}</td>
+                        <td>${r.total}</td>
+                        <td>${r.percent}%</td>
+                        <td><strong>${r.grade}</strong></td>
+                        <td>${r.date}</td>
+                    </tr>
+                `).join('')}
+            </table>
+            <button class="btn btn-outline btn-sm" style="margin-top:10px;" onclick="showTeacherScreen()">Назад</button>
+        `;
+    }
+
+    // ==================== СТАРТ ====================
+    showScreen('screen-login');
+</script>
+</body>
+</html>
